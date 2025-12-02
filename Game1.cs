@@ -1,15 +1,30 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Xml;
 
 namespace Monogame_Lesson_3_Animation
 {
+
+    enum Screen
+    {
+        Intro,
+        TribbleYard
+    }
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         Rectangle window;
+
+        Screen screen;
+
+        MouseState mousestate;
+
+        Texture2D introTexture;
+
 
         Texture2D tribbleBrownTexture;
         Rectangle tribbleBrownRect;
@@ -45,6 +60,9 @@ namespace Monogame_Lesson_3_Animation
             _graphics.PreferredBackBufferHeight = window.Height;   
             _graphics.ApplyChanges();
 
+            screen = Screen.Intro;
+
+
             tribbleGreyRect = new Rectangle(300, 10, 100, 100);
             tribbleGreySpeed = new Vector2(2, 0);
 
@@ -73,7 +91,7 @@ namespace Monogame_Lesson_3_Animation
             tribbleCreamTexture = Content.Load<Texture2D>("tribbleCream");
             tribbleOrangeTexture = Content.Load<Texture2D>("tribbleOrange");
 
-
+            introTexture = Content.Load<Texture2D>("tribble_intro");
         }
 
         protected override void Update(GameTime gameTime)
@@ -82,42 +100,44 @@ namespace Monogame_Lesson_3_Animation
                 Exit();
 
             // TODO: Add your update logic here
+            mousestate = Mouse.GetState();
 
-            tribbleGreyRect.X += (int)tribbleGreySpeed.X;
-            tribbleGreyRect.Y += (int)tribbleGreySpeed.Y;
-
-            if (tribbleGreyRect.Right > window.Width || tribbleGreyRect.X < 0)
-                tribbleGreySpeed.X *= -1;
-            if (tribbleGreyRect.Bottom > window.Height || tribbleGreyRect.Top < 0)
-                tribbleGreySpeed.Y *= -1;
-
-            tribbleCreamRect.X += (int)tribbleCreamSpeed.X;
-            tribbleCreamRect.Y += (int)tribbleCreamSpeed.Y;
-
-            if (tribbleCreamRect.Right > window.Width || tribbleCreamRect.X < 0)
-                tribbleCreamSpeed.X *= -1;
-            if (tribbleCreamRect.Bottom > window.Height || tribbleCreamRect.Top < 0)
-                tribbleCreamSpeed.Y *= -1;
-
-            tribbleBrownRect.X += (int)tribbleBrownSpeed.X;
-            tribbleBrownRect.Y += (int)tribbleBrownSpeed.Y;
-
-            if (tribbleBrownRect.Right > window.Width || tribbleBrownRect.X < 0)
-                tribbleBrownSpeed.X *= -1;
-            if (tribbleBrownRect.Bottom > window.Height || tribbleBrownRect.Top < 0)
-                tribbleBrownSpeed.Y *= -1;
-
-            tribbleOrangeRect.X += (int)tribbleOrangeSpeed.X;
-            tribbleOrangeRect.Y += (int)tribbleOrangeSpeed.Y;
-
-            if (tribbleOrangeRect.Right > window.Width || tribbleOrangeRect.X < 0)
-                tribbleOrangeSpeed.X *= -1;
-            if (tribbleOrangeRect.Bottom > window.Height || tribbleOrangeRect.Top < 0)
-                tribbleOrangeSpeed.Y *= -1;
+            if (screen == Screen.Intro)
+            {
+                if (mousestate.LeftButton == ButtonState.Pressed)
+                    screen = Screen.TribbleYard;
 
 
+                
+            }
+            else if (screen == Screen.TribbleYard)
+            {
+                tribbleGreyRect.X += (int)tribbleGreySpeed.X;
+                if (tribbleGreyRect.X > window.Width)
+                {
+                    tribbleGreyRect.X = -tribbleGreyRect.Width;
+                }
+                tribbleCreamRect.X += (int)tribbleCreamSpeed.X;
+                if (tribbleCreamRect.X > window.Width)
+                {
+                    tribbleCreamRect.X = -tribbleCreamRect.Width;
+                }
+                tribbleBrownRect.X += (int)tribbleBrownSpeed.X;
+                if (tribbleBrownRect.X > window.Width)
+                {
+                    tribbleBrownRect.X = -tribbleBrownRect.Width;
+                }
+                tribbleOrangeRect.X += (int)tribbleOrangeSpeed.X;
+                if (tribbleOrangeRect.X > window.Width)
+                {
+                    tribbleOrangeRect.X = -tribbleOrangeRect.Width;
+                }
 
-            base.Update(gameTime);
+
+            }
+
+
+                base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -127,18 +147,18 @@ namespace Monogame_Lesson_3_Animation
             // TODO: Add your drawing code here
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(tribbleGreyTexture, tribbleGreyRect, Color.White);
-            
+            if (screen == Screen.Intro)
+            {
+                _spriteBatch.Draw(introTexture, window, Color.White);
+            }
+            else if (screen == Screen.TribbleYard)
+            {
+                _spriteBatch.Draw(tribbleGreyTexture, tribbleGreyRect, Color.White);
+                _spriteBatch.Draw(tribbleCreamTexture, tribbleCreamRect, Color.White);
+                _spriteBatch.Draw(tribbleBrownTexture, tribbleBrownRect, Color.White);
+                _spriteBatch.Draw(tribbleOrangeTexture, tribbleOrangeRect, Color.White);
+            }
 
-
-            _spriteBatch.Draw(tribbleBrownTexture, tribbleBrownRect, Color.White);
-           
-
-            _spriteBatch.Draw(tribbleCreamTexture, tribbleCreamRect, Color.White);
-            
-
-            _spriteBatch.Draw(tribbleOrangeTexture, tribbleOrangeRect, Color.White);
-           
 
             _spriteBatch.End();
 
