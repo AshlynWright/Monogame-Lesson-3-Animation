@@ -10,7 +10,8 @@ namespace Monogame_Lesson_3_Animation
     enum Screen
     {
         Intro,
-        TribbleYard
+        TribbleYard,
+        End
     }
 
     public class Game1 : Game
@@ -44,6 +45,8 @@ namespace Monogame_Lesson_3_Animation
         Vector2 tribbleOrangeSpeed;
 
         Color tribbleHitDetection;
+
+        int bounces = 0;
 
         // Added variable
         private Texture2D backgroundTexture;
@@ -168,6 +171,7 @@ namespace Monogame_Lesson_3_Animation
                 tribbleOrangeRect.X += (int)tribbleOrangeSpeed.X;
                 if (tribbleOrangeRect.Right > _graphics.PreferredBackBufferWidth || tribbleOrangeRect.Left < 0)
                 {
+
                     tribbleHitDetection = Color.SandyBrown;
                     tribbleOrangeSpeed.X *= -1;
                 }
@@ -178,6 +182,10 @@ namespace Monogame_Lesson_3_Animation
                     tribbleHitDetection = Color.SandyBrown;
                     tribbleOrangeSpeed.Y *= -1;
                 }
+
+            }
+            else if (screen == Screen.End)
+            {
 
             }
 
@@ -202,7 +210,10 @@ namespace Monogame_Lesson_3_Animation
                 _spriteBatch.Draw(tribbleBrownTexture, tribbleBrownRect, Color.White);
                 _spriteBatch.Draw(tribbleOrangeTexture, tribbleOrangeRect, Color.White);
             }
-
+            else if (screen == Screen.End)
+            {
+                // Draw end screen elements here
+            }
 
             _spriteBatch.End();
 
