@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Xml;
 
 namespace Monogame_Lesson_3_Animation
-    // Monogame Assignemnt 5 
+     
 {
 
     enum Screen
